@@ -1,0 +1,270 @@
+{
+    "smithy": "2.0",
+    "metadata": {
+        "validators": [
+            {
+                "configuration": {
+                    "bindToTrait": "uk.co.motorway#handler",
+                    "messageTemplate": "    @{trait|uk.co.motorway#handler|language} is not supported by type-safe-api.\n    Supported languages are \"typescript\", \"java\" and \"python\".\n",
+                    "selector": "    :not([@trait|uk.co.motorway#handler: @{language} = typescript, java, python])\n"
+                },
+                "id": "SupportedLanguage_handler",
+                "name": "EmitEachSelector"
+            },
+            {
+                "configuration": {
+                    "bindToTrait": "uk.co.motorway#handler",
+                    "messageTemplate": "    @@handler language @{trait|uk.co.motorway#handler|language} cannot be referenced unless a handler project is configured for this language.\n    Configured handler project languages are: typescript.\n    You can add this language by configuring TypeSafeApiProject in your .projenrc\n",
+                    "selector": "    [@trait|uk.co.motorway#handler: @{language} = typescript, java, python]\n    :not([@trait|uk.co.motorway#handler: @{language} = typescript])\n"
+                },
+                "id": "ConfiguredHandlerProject_handler",
+                "name": "EmitEachSelector"
+            }
+        ]
+    },
+    "shapes": {
+        "uk.co.motorway#BadRequestError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "uk.co.motorway#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "Message with details about the error",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "An error at the fault of the client sending invalid input",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 400
+            }
+        },
+        "uk.co.motorway#Car": {
+            "type": "structure",
+            "members": {
+                "make": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "model": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "A structure which defines a Car"
+            }
+        },
+        "uk.co.motorway#CarApi": {
+            "type": "service",
+            "version": "1.0",
+            "operations": [
+                {
+                    "target": "uk.co.motorway#GetCars"
+                },
+                {
+                    "target": "uk.co.motorway#PostCars"
+                }
+            ],
+            "errors": [
+                {
+                    "target": "smithy.framework#ValidationException"
+                },
+                {
+                    "target": "uk.co.motorway#BadRequestError"
+                },
+                {
+                    "target": "uk.co.motorway#InternalFailureError"
+                },
+                {
+                    "target": "uk.co.motorway#NotAuthorizedError"
+                }
+            ],
+            "traits": {
+                "aws.protocols#restJson1": {},
+                "smithy.api#title": "Car API"
+            }
+        },
+        "uk.co.motorway#CarList": {
+            "type": "list",
+            "member": {
+                "target": "uk.co.motorway#Car"
+            },
+            "traits": {
+                "smithy.api#documentation": "A list of cars"
+            }
+        },
+        "uk.co.motorway#ErrorMessage": {
+            "type": "string",
+            "traits": {
+                "smithy.api#documentation": "An error message"
+            }
+        },
+        "uk.co.motorway#GetCars": {
+            "type": "operation",
+            "input": {
+                "target": "uk.co.motorway#GetCarsInput"
+            },
+            "output": {
+                "target": "uk.co.motorway#GetCarsOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "code": 200,
+                    "method": "GET",
+                    "uri": "/cars"
+                },
+                "smithy.api#readonly": {},
+                "uk.co.motorway#handler": {
+                    "language": "typescript"
+                }
+            }
+        },
+        "uk.co.motorway#GetCarsInput": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#httpQuery": "id"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "uk.co.motorway#GetCarsOutput": {
+            "type": "structure",
+            "members": {
+                "items": {
+                    "target": "uk.co.motorway#CarList",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "uk.co.motorway#InternalFailureError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "uk.co.motorway#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "Message with details about the error",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "An internal failure at the fault of the server",
+                "smithy.api#error": "server",
+                "smithy.api#httpError": 500
+            }
+        },
+        "uk.co.motorway#NotAuthorizedError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "uk.co.motorway#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "Message with details about the error",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "An error due to the client not being authorized to access the resource",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 403
+            }
+        },
+        "uk.co.motorway#NotFoundError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "uk.co.motorway#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "Message with details about the error",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "An error due to the client attempting to access a missing resource",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 404
+            }
+        },
+        "uk.co.motorway#PostCars": {
+            "type": "operation",
+            "input": {
+                "target": "uk.co.motorway#PostCarsInput"
+            },
+            "output": {
+                "target": "uk.co.motorway#PostCarsOutput"
+            },
+            "traits": {
+                "smithy.api#http": {
+                    "code": 200,
+                    "method": "POST",
+                    "uri": "/cars"
+                },
+                "uk.co.motorway#handler": {
+                    "language": "typescript"
+                }
+            }
+        },
+        "uk.co.motorway#PostCarsInput": {
+            "type": "structure",
+            "members": {
+                "items": {
+                    "target": "uk.co.motorway#CarList"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "uk.co.motorway#PostCarsOutput": {
+            "type": "structure",
+            "members": {
+                "items": {
+                    "target": "uk.co.motorway#CarList",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "uk.co.motorway#handler": {
+            "type": "structure",
+            "members": {
+                "language": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "The language you will implement the lambda in.\nValid values: typescript, java, python",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Add this trait to an operation to generate a lambda handler stub for the operation.\nYou have configured handler projects for typescript",
+                "smithy.api#trait": {
+                    "selector": "operation"
+                }
+            }
+        }
+    }
+}
