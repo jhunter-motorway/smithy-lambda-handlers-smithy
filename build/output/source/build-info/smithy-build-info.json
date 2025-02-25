@@ -48,6 +48,12 @@
         "aws.api#service",
         "aws.api#tagEnabled",
         "aws.api#taggable",
+        "aws.apigateway#apiKeySource",
+        "aws.apigateway#authorizer",
+        "aws.apigateway#authorizers",
+        "aws.apigateway#integration",
+        "aws.apigateway#mockIntegration",
+        "aws.apigateway#requestValidator",
         "aws.auth#cognitoUserPools",
         "aws.auth#sigv4",
         "aws.auth#sigv4a",
@@ -154,6 +160,7 @@
         "uk.co.motorway#handler"
     ],
     "traitNames": [
+        "aws.api#arnReference",
         "aws.protocols#restJson1",
         "smithy.api#authDefinition",
         "smithy.api#box",

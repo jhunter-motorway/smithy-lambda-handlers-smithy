@@ -2,43 +2,16 @@
   "version": "1.0",
   "sources": ["model"],
   "outputDirectory": "build/output",
-  "projections": {
-    "ts-server": {
-      "transforms": [
-        {
-          "name": "excludeShapesByTag",
-          "args": {
-            "tags": ["client-only"]
-          }
-        },
-        {
-          "name": "includeServices",
-          "args": {
-            "services": ["uk.co.motorway#CarApi"]
-          }
-        }
-      ],
-      "plugins": {
-        "typescript-server-codegen": {
-          "service": "uk.co.motorway#CarApi",
-          "package": "car-api",
-          "packageVersion": "0.0.1"
-        }
-      }
+  "plugins": {
+    "openapi": {
+      "service": "uk.co.motorway#CarApi",
+      "apiGatewayDefaults": "2023-08-11"
     }
-    // "apigateway": {
-    //   "plugins": {
-    //     "openapi": {
-    //       "service": "uk.co.motorway#CarApi",
-    //       "protocol": "aws.protocols#restJson1",
-    //       "version": "3.1.0"
-    //     }
-    //   }
-    // }
   },
   "maven": {
     "dependencies": [
       "software.amazon.smithy.typescript:smithy-typescript-codegen:0.26.0",
+      "software.amazon.smithy:smithy-aws-apigateway-openapi:1.54.0",
       "software.amazon.smithy:smithy-aws-traits:1.54.0",
       "software.amazon.smithy:smithy-cli:1.28.0",
       "software.amazon.smithy:smithy-model:1.28.0",
