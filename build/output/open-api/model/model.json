@@ -779,118 +779,6 @@
                 }
             }
         },
-        "aws.apigateway#integration": {
-            "type": "structure",
-            "members": {
-                "type": {
-                    "target": "aws.apigateway#IntegrationType",
-                    "traits": {
-                        "smithy.api#documentation": "The type of integration with the specified backend.",
-                        "smithy.api#required": {}
-                    }
-                },
-                "uri": {
-                    "target": "aws.apigateway#Arn",
-                    "traits": {
-                        "smithy.api#documentation": "The endpoint URI of the backend. For integrations of the `aws` type,\nthis is an ARN value. For the HTTP integration, this is the URL of the\nHTTP endpoint including the `https` or `http` scheme.",
-                        "smithy.api#required": {}
-                    }
-                },
-                "credentials": {
-                    "target": "aws.apigateway#IamRoleArn",
-                    "traits": {
-                        "smithy.api#documentation": "Specifies the credentials required for the integration, if any. For AWS\nIAM role-based credentials, specify the ARN of an appropriate IAM role.\nIf unspecified, credentials will default to resource-based permissions\nthat must be added manually to allow the API to access the resource."
-                    }
-                },
-                "httpMethod": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "Specifies the integration's HTTP method type (for example, `POST`).\nFor Lambda function invocations, the value must be `POST`.",
-                        "smithy.api#required": {}
-                    }
-                },
-                "passThroughBehavior": {
-                    "target": "aws.apigateway#PassThroughBehavior",
-                    "traits": {
-                        "smithy.api#documentation": "Specifies how a request payload of unmapped content type is passed\nthrough the integration request without modification."
-                    }
-                },
-                "contentHandling": {
-                    "target": "aws.apigateway#ContentHandling",
-                    "traits": {
-                        "smithy.api#documentation": "Request payload content handling."
-                    }
-                },
-                "timeoutInMillis": {
-                    "target": "smithy.api#Integer",
-                    "traits": {
-                        "smithy.api#documentation": "Integration timeouts between 50 ms and 29,000 ms."
-                    }
-                },
-                "connectionId": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "The ID of a VpcLink for the private integration."
-                    }
-                },
-                "connectionType": {
-                    "target": "aws.apigateway#ConnectionType",
-                    "traits": {
-                        "smithy.api#default": "INTERNET",
-                        "smithy.api#documentation": "The type of the network connection to the integration endpoint. The\nvalid value is `INTERNET` for connections through the public routable\ninternet or `VPC_LINK` for private connections between API Gateway and\na network load balancer in a VPC. The default value is `INTERNET`."
-                    }
-                },
-                "cacheNamespace": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "An API-specific tag group of related cached parameters."
-                    }
-                },
-                "payloadFormatVersion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "Specifies the format of the payload sent to an integration. Required\nfor HTTP APIs. For HTTP APIs, supported values for Lambda proxy\nintegrations are 1.0 and 2.0. For all other integrations, 1.0 is the\nonly supported value."
-                    }
-                },
-                "cacheKeyParameters": {
-                    "target": "aws.apigateway#StringList",
-                    "traits": {
-                        "smithy.api#documentation": "A list of request parameter names whose values are to be cached."
-                    }
-                },
-                "requestParameters": {
-                    "target": "aws.apigateway#RequestParameters",
-                    "traits": {
-                        "smithy.api#documentation": "Specifies mappings from method request parameters to integration\nrequest parameters."
-                    }
-                },
-                "requestTemplates": {
-                    "target": "aws.apigateway#Templates",
-                    "traits": {
-                        "smithy.api#documentation": "Mapping templates for a request payload of specified media types."
-                    }
-                },
-                "responses": {
-                    "target": "aws.apigateway#IntegrationResponses",
-                    "traits": {
-                        "smithy.api#documentation": "Defines the method's responses and specifies desired parameter mappings\nor payload mappings from integration responses to method responses."
-                    }
-                }
-            },
-            "traits": {
-                "smithy.api#documentation": "Defines an API Gateway integration.",
-                "smithy.api#internal": {},
-                "smithy.api#tags": [
-                    "internal"
-                ],
-                "smithy.api#trait": {
-                    "selector": ":test(service, resource, operation)",
-                    "conflicts": [
-                        "aws.apigateway#mockIntegration"
-                    ]
-                }
-            }
-        },
         "aws.apigateway#mockIntegration": {
             "type": "structure",
             "members": {
@@ -3814,12 +3702,6 @@
                 }
             ],
             "traits": {
-                "aws.apigateway#integration": {
-                    "type": "aws_proxy",
-                    "uri": "${lambdaArn}",
-                    "httpMethod": "POST",
-                    "passthroughBehavior": "when_no_match"
-                },
                 "aws.protocols#restJson1": {},
                 "smithy.api#title": "Car API"
             }

@@ -1,10 +1,13 @@
 // smithy-typescript generated code
+import { serializeFrameworkException } from "../protocols/Aws_restJson1";
 import {
   GetCars,
+  GetCarsSerializer,
   GetCarsServerInput,
 } from "./operations/GetCars";
 import {
   PostCars,
+  PostCarsSerializer,
   PostCarsServerInput,
 } from "./operations/PostCars";
 import {
@@ -22,7 +25,10 @@ import {
   UnknownOperationException as __UnknownOperationException,
   ValidationCustomizer as __ValidationCustomizer,
   ValidationFailure as __ValidationFailure,
+  generateValidationMessage as __generateValidationMessage,
+  generateValidationSummary as __generateValidationSummary,
   isFrameworkException as __isFrameworkException,
+  httpbinding,
 } from "@aws-smithy/server-common";
 import {
   NodeHttpHandler,
@@ -136,4 +142,46 @@ export class CarApiServiceHandler<Context> implements __ServiceHandler<Context> 
       }
     }
   }
+}
+
+export const getCarApiServiceHandler = <Context>(service: CarApiService<Context>): __ServiceHandler<Context, __HttpRequest, __HttpResponse> => {
+  const mux = new httpbinding.HttpBindingMux<"CarApi", keyof CarApiService<Context>>([
+    new httpbinding.UriSpec<"CarApi", "GetCars">(
+      'GET',
+      [
+        { type: 'path_literal', value: "cars" },
+      ],
+      [
+      ],
+      { service: "CarApi", operation: "GetCars" }),
+    new httpbinding.UriSpec<"CarApi", "PostCars">(
+      'POST',
+      [
+        { type: 'path_literal', value: "cars" },
+      ],
+      [
+      ],
+      { service: "CarApi", operation: "PostCars" }),
+  ]);
+  const serFn: (op: CarApiServiceOperations) => __OperationSerializer<CarApiService<Context>, CarApiServiceOperations, __ServiceException> = (op) => {
+    switch (op) {
+      case "GetCars": return new GetCarsSerializer();
+      case "PostCars": return new PostCarsSerializer();
+    }
+  };
+  const customizer: __ValidationCustomizer<CarApiServiceOperations> = (ctx, failures) => {
+    if (!failures) {
+      return undefined;
+    }
+    return {
+      name: "ValidationException",
+      $fault: "client",
+      message: __generateValidationSummary(failures),
+      fieldList: failures.map(failure => ({
+        path: failure.path,
+        message: __generateValidationMessage(failure)
+      }))
+    };
+  };
+  return new CarApiServiceHandler(service, mux, serFn, serializeFrameworkException, customizer);
 }

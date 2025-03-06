@@ -86,12 +86,6 @@
                 }
             ],
             "traits": {
-                "aws.apigateway#integration": {
-                    "type": "aws_proxy",
-                    "uri": "${lambdaArn}",
-                    "httpMethod": "POST",
-                    "passthroughBehavior": "when_no_match"
-                },
                 "aws.protocols#restJson1": {},
                 "smithy.api#title": "Car API"
             }

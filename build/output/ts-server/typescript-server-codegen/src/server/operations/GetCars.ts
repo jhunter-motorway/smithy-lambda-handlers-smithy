@@ -7,6 +7,15 @@ import {
   NotAuthorizedError,
   ValidationException,
 } from "../../models/models_0";
+import {
+  deserializeGetCarsRequest,
+  serializeBadRequestErrorError,
+  serializeFrameworkException,
+  serializeGetCarsResponse,
+  serializeInternalFailureErrorError,
+  serializeNotAuthorizedErrorError,
+  serializeValidationExceptionError,
+} from "../../protocols/Aws_restJson1";
 import { CarApiService } from "../CarApiService";
 import {
   ServerSerdeContext,
@@ -24,7 +33,10 @@ import {
   SmithyFrameworkException as __SmithyFrameworkException,
   ValidationCustomizer as __ValidationCustomizer,
   ValidationFailure as __ValidationFailure,
+  generateValidationMessage as __generateValidationMessage,
+  generateValidationSummary as __generateValidationSummary,
   isFrameworkException as __isFrameworkException,
+  httpbinding,
 } from "@aws-smithy/server-common";
 import {
   NodeHttpHandler,
@@ -57,8 +69,8 @@ export interface GetCarsServerOutput extends GetCarsOutput {}
 export type GetCarsErrors = BadRequestError | NotAuthorizedError | InternalFailureError | ValidationException
 
 export class GetCarsSerializer implements __OperationSerializer<CarApiService<any>, "GetCars", GetCarsErrors> {
-  serialize = (async (...args: any[]) => { throw new Error("No supported protocol was found"); }) as any;
-  deserialize = (async (...args: any[]) => { throw new Error("No supported protocol was found"); }) as any;
+  serialize = serializeGetCarsResponse;
+  deserialize = deserializeGetCarsRequest;
 
   isOperationError(error: any): error is GetCarsErrors {
     const names: GetCarsErrors['name'][] = ["BadRequestError", "NotAuthorizedError", "InternalFailureError", "ValidationException"];
@@ -68,16 +80,16 @@ export class GetCarsSerializer implements __OperationSerializer<CarApiService<an
   serializeError(error: GetCarsErrors, ctx: ServerSerdeContext): Promise<__HttpResponse> {
     switch (error.name) {
       case "BadRequestError": {
-        return (async (...args: any[]) => { throw new Error("No supported protocol was found"); })(error, ctx);
+        return serializeBadRequestErrorError(error, ctx);
       }
       case "NotAuthorizedError": {
-        return (async (...args: any[]) => { throw new Error("No supported protocol was found"); })(error, ctx);
+        return serializeNotAuthorizedErrorError(error, ctx);
       }
       case "InternalFailureError": {
-        return (async (...args: any[]) => { throw new Error("No supported protocol was found"); })(error, ctx);
+        return serializeInternalFailureErrorError(error, ctx);
       }
       case "ValidationException": {
-        return (async (...args: any[]) => { throw new Error("No supported protocol was found"); })(error, ctx);
+        return serializeValidationExceptionError(error, ctx);
       }
       default: {
         throw error;
@@ -85,6 +97,34 @@ export class GetCarsSerializer implements __OperationSerializer<CarApiService<an
     }
   }
 
+}
+
+export const getGetCarsHandler = <Context>(operation: __Operation<GetCarsServerInput, GetCarsServerOutput, Context>): __ServiceHandler<Context, __HttpRequest, __HttpResponse> => {
+  const mux = new httpbinding.HttpBindingMux<"CarApi", "GetCars">([
+    new httpbinding.UriSpec<"CarApi", "GetCars">(
+      'GET',
+      [
+        { type: 'path_literal', value: "cars" },
+      ],
+      [
+      ],
+      { service: "CarApi", operation: "GetCars" }),
+  ]);
+  const customizer: __ValidationCustomizer<"GetCars"> = (ctx, failures) => {
+    if (!failures) {
+      return undefined;
+    }
+    return {
+      name: "ValidationException",
+      $fault: "client",
+      message: __generateValidationSummary(failures),
+      fieldList: failures.map(failure => ({
+        path: failure.path,
+        message: __generateValidationMessage(failure)
+      }))
+    };
+  };
+  return new GetCarsHandler(operation, mux, new GetCarsSerializer(), serializeFrameworkException, customizer);
 }
 
 const serdeContextBase = {
